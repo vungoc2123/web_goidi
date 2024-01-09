@@ -50,6 +50,54 @@ const writeUsersToFile = (users) => {
 
 app.use(cors(corsOptions));
 
+app.get('/users', (req, res) => {
+  var { name, limit } = req.query;
+  const ref = db.ref('/users');
+  if (name) {
+    ref.orderByChild('name').startAt(name).endAt(name + '\uf8ff').limitToFirst(Number(limit)).once('value')
+      .then(snapshot => {
+        const users = Object.values(snapshot.val());
+        res.status(200).send(users);
+      })
+      .catch(error => {
+        console.error('Lỗi khi lấy danh sách người dùng:', error);
+      });
+  } else {
+    ref.orderByKey().limitToFirst(Number(limit)).once('value')
+      .then(snapshot => {
+        const users = Object.values(snapshot.val());
+        res.status(200).send(users);
+      })
+      .catch(error => {
+        console.error('Lỗi khi lấy danh sách người dùng:', error);
+      });
+  }
+})
+
+app.post('/users/:userKey', async (req, res) => {
+  const { userKey, name, phone, password, role, token, soLan } = req.body;
+  const updatedData = {
+    id: userKey,
+    name: name,
+    phone: phone,
+    password: password,
+    role: Number(role),
+    token: token,
+    soLan: Number(soLan),
+  }
+  console.log(req.body)
+
+  const dishRef = db.ref(`/users/${userKey}`);
+  dishRef.update(updatedData)
+    .then(() => {
+      res.status(200).send('User updated successfully');
+    })
+    .catch(error => {
+      console.error('Error updating table:', error);
+      res.status(500).send('Internal Server Error');
+    });
+})
+
 app.get('/dishs', (req, res) => {
   var { name, limit } = req.query;
   const ref = db.ref('/Dish');
@@ -93,6 +141,64 @@ app.post('/dishs/:dishKey', async (req, res) => {
     .catch(error => {
       console.error('Error updating dish:', error);
       res.status(500).send('Internal Server Error');
+    });
+})
+
+app.get('/tables', (req, res) => {
+  var { number, limit } = req.query;
+  const ref = db.ref('/tables');
+  if (number) {
+    ref.orderByChild('number').equalTo(Number(number)).limitToFirst(Number(limit)).once('value')
+      .then(snapshot => {
+
+        const tables = Object.values(snapshot.val());
+        res.status(200).send(tables);
+      })
+      .catch(error => {
+        console.error('Lỗi khi lấy danh sách bàn:', error);
+      });
+  } else {
+    ref.orderByKey().limitToFirst(Number(limit)).once('value')
+      .then(snapshot => {
+        const tables = Object.values(snapshot.val());
+        res.status(200).send(tables);
+      })
+      .catch(error => {
+        console.error('Lỗi khi lấy danh sách bàn:', error);
+      });
+  }
+})
+
+app.post('/tables/:tableKey', async (req, res) => {
+  const { tableKey, number, seat } = req.body;
+  const updatedData = {
+    number: Number(number),
+    seat: Number(seat),
+    id: tableKey,
+  }
+  console.log(req.body)
+
+  const dishRef = db.ref(`/tables/${tableKey}`);
+  dishRef.update(updatedData)
+    .then(() => {
+      res.status(200).send('Table updated successfully');
+    })
+    .catch(error => {
+      console.error('Error updating table:', error);
+      res.status(500).send('Internal Server Error');
+    });
+})
+
+app.get('/feedbacks', (req, res) => {
+  var { name, limit } = req.query;
+  const ref = db.ref('/feedbacks');
+  ref.orderByKey().limitToFirst(Number(limit)).once('value')
+    .then(snapshot => {
+      const feedbacks = Object.values(snapshot.val());
+      res.status(200).send(feedbacks);
+    })
+    .catch(error => {
+      console.error('Lỗi khi lấy danh sách người dùng:', error);
     });
 })
 
