@@ -65,6 +65,12 @@ const _nav = [
 		to: '/feedback',
 		icon: <MdFeedback size={24} className="nav-icon" />,
 	},
+	{
+		component: CNavItem,
+		name: 'Revenue',
+		to: '/revenue',
+		icon: <MdFeedback size={24} className="nav-icon" />,
+	},
 ]
 
 export default _nav

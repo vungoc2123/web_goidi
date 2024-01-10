@@ -12,6 +12,7 @@ const User = React.lazy(() => import('./views/user/users'))
 const AddUser = React.lazy(() => import('./views/user/addUser'))
 const UpdateUser = React.lazy(() => import('./views/user/updateUser'))
 const Feedback = React.lazy(() => import('./views/feedback/feedbacks'))
+const Revenue = React.lazy(() => import('./views/revenue/revenue'))
 const routes = [
 	{ path: '/login', name: 'Đăng nhập', element: Login },
 
@@ -28,6 +29,7 @@ const routes = [
 	{ path: '/table/:id', name: 'Cập Nhật bàn ăn', element: UpdateTable },
 
 	{ path: '/feedback', name: 'Phản hồi', element: Feedback },
+	{ path: '/revenue', name: 'Doanh thu', element: Revenue },
 ]
 
 export default routes	

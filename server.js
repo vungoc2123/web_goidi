@@ -194,8 +194,34 @@ app.get('/feedbacks', (req, res) => {
   const ref = db.ref('/feedbacks');
   ref.orderByKey().limitToFirst(Number(limit)).once('value')
     .then(snapshot => {
+  
       const feedbacks = Object.values(snapshot.val());
       res.status(200).send(feedbacks);
+    })
+    .catch(error => {
+      console.error('Lỗi khi lấy danh sách người dùng:', error);
+    });
+})
+
+app.get('/revenue', (req, res) => {
+  var { dateStart, dateEnd } = req.query;
+  const dateStart1 = dateStart.split("-");
+  const dateStart2 = `${dateStart1[2]}/${dateStart1[1]}/${dateStart1[0]}`;
+  const dateEnd1 = dateEnd.split("-");
+  const dateEnd2 = `${dateEnd1[2]}/${dateEnd1[1]}/${dateEnd1[0]}`;
+  const ref = db.ref('/orders');
+  ref.once('value')
+    .then(snapshot => {
+      const bills = Object.values(snapshot.val() || {});
+      const filteredBills = bills.filter(bill => {
+        return bill.date >= dateStart2 && bill.date <= dateEnd2;
+      });
+      let listBill = filteredBills.filter(bill => bill.status === 2);
+      let revenue = 0;
+      for(let i =0; i < listBill.length; i ++){
+          revenue += listBill.at(i).total;
+      }
+      res.status(200).json({revenue});
     })
     .catch(error => {
       console.error('Lỗi khi lấy danh sách người dùng:', error);
