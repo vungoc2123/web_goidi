@@ -17,32 +17,31 @@ const AppHeaderDropdown = () => {
 
 	const handleLogout = async () => {
 		const authToken = localStorage.getItem('token');
+		localStorage.removeItem('token');
+		navigate('/login')
+		// if (authToken) {
+		// 	try {
+		// 		const response = await fetch('http://localhost:8000/logout', {
+		// 			method: 'POST',
+		// 			headers: {
+		// 				'Content-Type': 'application/json',
+		// 				'Authorization': `Bearer ${authToken}`,
+		// 			},
+		// 		});
 
-		if (authToken) {
-			try {
-				const response = await fetch('http://localhost:8000/logout', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': `Bearer ${authToken}`,
-					},
-				});
-
-				const data = await response.json();
-
-				if (data.success) {
-					// Xóa token khỏi localStorage khi đăng xuất
-					localStorage.removeItem('token');
-					navigate('/login')
-				} else {
-					console.error('Đăng xuất thất bại');
-				}
-			} catch (error) {
-				console.error('Lỗi khi gọi API đăng xuất', error);
-			}
-		} else {
-			console.error('Không có token để gửi yêu cầu đăng xuất');
-		}
+		// 		const data = await response.json();
+		// 		if (data.success) {
+		// 			// Xóa token khỏi localStorage khi đăng xuất
+					
+		// 		} else {
+		// 			console.error('Đăng xuất thất bại');
+		// 		}
+		// 	} catch (error) {
+		// 		console.error('Lỗi khi gọi API đăng xuất', error);
+		// 	}
+		// } else {
+		// 	console.error('Không có token để gửi yêu cầu đăng xuất');
+		// }
 	};
 
 	return (

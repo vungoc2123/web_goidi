@@ -84,14 +84,20 @@ const UpdateUser = () => {
             </CCardHeader>
             <CCardBody>
                 <CForm onSubmit={handleSubmit(onSubmit)}>
-                <div className="mb-3">
+                    <div className="mb-3">
                         <CFormLabel htmlFor="exampleFormControlInput1">Tên</CFormLabel>
                         <CFormInput {...register('name', { required: "Vui lòng nhập tên" })} type="text" placeholder="VD: marry" />
                         {errors.name && <CFormFeedback className='mt-1' style={{ color: 'red' }}>{errors.name.message}</CFormFeedback>}
                     </div>
                     <div className="mb-3">
                         <CFormLabel htmlFor="exampleFormControlInput1">Số điện thoại</CFormLabel>
-                        <CFormInput {...register('phone', { required: "Vui lòng nhập số điện thoại" })} type="text" placeholder="VD: 0123456789" />
+                        <CFormInput {...register('phone', {
+                            pattern: {
+                                value: /^\d{10}$/,
+                                message: "Số điện thoại phải chứa đúng 10 chữ số và phải là số"
+                            },
+                            required: "Vui lòng nhập số điện thoại"
+                        })} type="text" placeholder="VD: 0123456789" />
                         {errors.phone && <CFormFeedback className='mt-1' style={{ color: 'red' }}>{errors.phone.message}</CFormFeedback>}
                     </div>
                     <div className="mb-3">
@@ -104,7 +110,7 @@ const UpdateUser = () => {
                         <CFormInput {...register('role', { required: "Vui lòng nhập vai trò" })} type="text" placeholder="VD: admin: 0  client: 1" />
                         {errors.role && <CFormFeedback className='mt-1' style={{ color: 'red' }}>{errors.role.message}</CFormFeedback>}
                     </div>
-                    
+
                     <div className='mb-2 mt-4' style={{ textAlign: 'right' }}>
                         <CButton className='mt-1 text-light' type='submit' color="success" style={{ width: 100 }}>Save</CButton>
                     </div>
